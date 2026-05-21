@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sport-demo-api
+  name: socketstwo-api
   labels:
-    app: sport-demo-api
+    app: socketstwo-api
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: sport-demo-api
+      app: socketstwo-api
   template:
     metadata:
       labels:
-        app: sport-demo-api
+        app: socketstwo-api
     spec:
       containers:
-        - name: sport-demo-api
-          image: dicksonndumia19/sports-api:latest
+        - name: socketstwo-api
+          image: dicksonndumia19/socketstwo-api:latest
           ports:
             - containerPort: 3000
           env:
