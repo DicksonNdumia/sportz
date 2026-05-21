@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      container_name: backend-api
+      ports:
+        - "5000:5000"
+      environment:
+        NODE_ENV: production
+      volumes:
+        - .:/app
+        - /app/node_module
+      commands: npm run dev

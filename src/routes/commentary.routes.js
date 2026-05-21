@@ -78,6 +78,14 @@ router.post("/:id", async (req, res) => {
       })
       .returning();
 
+    if (typeof res.app.locals.broadCastCommentary === "function") {
+      try {
+        res.app.locals.broadCastCommentary(commentaryInsert);
+      } catch (broadcastError) {
+        console.error(`Failed to broadcast commentary`, broadcastError);
+      }
+    }
+
     return res.status(201).json(commentaryInsert);
   } catch (error) {
     console.error("Failed to create commentary", error);

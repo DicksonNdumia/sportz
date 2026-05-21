@@ -24,11 +24,25 @@ app.get("/", (req, res) => {
   console.log("Route was hit");
   res.send("Hello, World!");
 });
+
+//Tests
+app.get("/", (req, res) => {
+  res.json({
+    message: "Hello From a container",
+    service: "Hello-node",
+    pod: process.env.POD_NAME || "unknown",
+    time: new Date().toISOString(),
+  });
+});
+
+app.get("/ready", (req, res) => res.status(200).send("ready"));
+app.get("/healthy", (req, res) => res.status(200).send("ok"));
 app.use("/matches", matchRouter);
 app.use("/commentary", commentaryRouter);
 
-const { broadCastMatch } = attachWebSocketServer(server);
+const { broadCastMatch, broadCastCommentary } = attachWebSocketServer(server);
 app.locals.broadCastMatch = broadCastMatch;
+app.locals.broadCastCommentary = broadCastCommentary;
 
 server.listen(PORT, HOST, () => {
   const baseUrl =
