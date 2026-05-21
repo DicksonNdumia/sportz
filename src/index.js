@@ -6,6 +6,7 @@ import { limiter } from "./middleware/helper/limiter.js";
 import matchRouter from "./routes/match.routes.js";
 import { logger } from "./middleware/log/logged.js";
 import { attachWebSocketServer } from "./ws/server.js";
+import commentaryRouter from "./routes/commentary.routes.js";
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 app.use("/matches", matchRouter);
+app.use("/commentary", commentaryRouter);
+
 const { broadCastMatch } = attachWebSocketServer(server);
 app.locals.broadCastMatch = broadCastMatch;
 

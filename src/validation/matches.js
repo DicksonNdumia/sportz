@@ -10,10 +10,6 @@ export const listMatchesQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(100).optional(),
 });
 
-export const listCommentaryQuerySchema = z.object({
-  limit: z.coerce.number().int().positive().max(100).optional(),
-});
-
 export const matchIdParamSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
@@ -49,18 +45,6 @@ export const createMatchSchema = z
       });
     }
   });
-
-export const createCommentarySchema = z.object({
-  minute: z.int(),
-  sequence: z.int().min(1),
-  period: z.string(),
-  eventType: z.string(),
-  actor: z.string(),
-  team: z.string(),
-  message: z.int().min(1),
-  metaData: z.json(),
-  tags: z.string().array(),
-});
 
 export const updateScoreSchema = z.object({
   homeScore: z.coerce.number().int().nonnegative(),
