@@ -24,7 +24,7 @@ router.get("/:id", async (req, res) => {
   if (!queryResults.success) {
     return res.status(400).json({
       error: "Invalid query",
-      details: error.message,
+      details: queryResults.error.issues,
     });
   }
 
