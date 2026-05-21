@@ -9,8 +9,8 @@ import { attachWebSocketServer } from "./ws/server.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT;
-const HOST = process.env.HOST;
+const PORT = process.env.PORT ?? 5000;
+const HOST = process.env.HOST ?? "0.0.0.0";
 
 const app = express();
 const server = http.createServer(app);
@@ -27,7 +27,7 @@ app.use("/matches", matchRouter);
 const { broadCastMatch } = attachWebSocketServer(server);
 app.locals.broadCastMatch = broadCastMatch;
 
-server.listen(PORT, () => {
+server.listen(PORT, HOST, () => {
   const baseUrl =
     HOST === "0.0.0.0" ? `http://localhost:${PORT}` : `http://${HOST}:${PORT}`;
   console.log(`Server is running on ${baseUrl}`);

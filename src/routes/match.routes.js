@@ -67,8 +67,15 @@ router.post("/", async (req, res) => {
       })
       .returning();
 
-    if (res.app.locals.broadCastMatch) {
-      res.app.locals.broadCastMatch(event);
+    if (typeof res.app.locals.broadCastMatch === "function") {
+      try {
+        res.app.locals.broadCastMatch(event);
+      } catch (broadcastError) {
+        console.error(
+          "Failed to broadcast match_created event",
+          broadcastError,
+        );
+      }
     }
 
     res.status(201).json({
