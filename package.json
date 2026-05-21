@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch src/index.ts",
+    "dev": "node --watch src/index.js",
     "push": "npx drizzle-kit push",
     "drop": "npx drizzle-kit drop",
-    "generate": "tsx src/drizzle/migrate.ts",
+    "generate": "tsx src/drizzle/migrate.js",
     "studio": "npx drizzle-kit studio"
   },
   "keywords": [],
@@ -22,7 +22,8 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "pg": "^8.21.0",
-    "postgres": "^3.4.9"
+    "postgres": "^3.4.9",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
