@@ -8,7 +8,7 @@ function sendJson(socket, payload) {
 
 function broadCast(wss, payload) {
   for (const client of wss.clients) {
-    if (client.readyState !== WebSocket.OPEN) continue;
+    if (client.readyState !== WebSocket.OPEN) return;
 
     client.send(JSON.stringify(payload));
   }
@@ -39,7 +39,7 @@ export function attachWebSocketServer(server) {
       ws.isAlive = false;
       ws.ping();
     });
-  }, 30000);
+  }, 60000);
 
   wss.on("close", () => clearInterval(interval));
 
@@ -50,5 +50,12 @@ export function attachWebSocketServer(server) {
     });
   }
 
-  return { broadCastMatch };
+  function broadCastCommentary(commentary) {
+    broadCast(wss, {
+      type: "Commentary Added Successfully",
+      data: commentary,
+    });
+  }
+
+  return { broadCastMatch, broadCastCommentary };
 }

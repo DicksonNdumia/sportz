@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sports-kubernetes-api-service
+  labels:
+    app: sport-kubernetes-api
+spec:
+  selector:
+    app: sport-kubernetes-api
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort
