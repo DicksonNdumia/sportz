@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
       data: event,
     });
   } catch (e) {
-    res.status(500).json({
+    return res.status(500).json({
       error: "Failed to create Match",
     });
   }
