@@ -24,7 +24,7 @@ router.get("/:id", async (req, res) => {
   if (!queryResults.success) {
     return res.status(400).json({
       error: "Invalid query",
-      details: queryResults.error.issues,
+      details: error.message,
     });
   }
 
@@ -41,6 +41,7 @@ router.get("/:id", async (req, res) => {
 
     return res.status(200).json(result);
   } catch (error) {
+    console.error("Failed to create commentary", error);
     return res.status(500).json({
       error: "Failed to create commentary",
       details: error.message,
@@ -79,6 +80,7 @@ router.post("/:id", async (req, res) => {
 
     return res.status(201).json(commentaryInsert);
   } catch (error) {
+    console.error("Failed to create commentary", error);
     return res.status(500).json({
       error: "Failed to create commentary",
       details: error.message,
