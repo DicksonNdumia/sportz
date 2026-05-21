@@ -33,9 +33,8 @@ router.get("/", async (req, res) => {
       event: data,
     });
   } catch (e) {
-    res.status(500).json({
+    return res.status(500).json({
       error: "Failed to get Matches",
-      details: JSON.stringify(e),
     });
   }
 });
@@ -43,10 +42,6 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const parsed = createMatchSchema.safeParse(req.body);
   //console.log("This is was Hit :", parsed);
-  const {
-    data: { startTime, endTime, homeScore, awayScore },
-  } = parsed;
-  //console.log("This is the parsed data:", parsed);
 
   if (!parsed.success) {
     return res.status(400).json({
@@ -54,6 +49,10 @@ router.post("/", async (req, res) => {
       details: JSON.stringify(parsed.error),
     });
   }
+  const {
+    data: { startTime, endTime, homeScore, awayScore },
+  } = parsed;
+  //console.log("This is the parsed data:", parsed);
 
   try {
     const [event] = await db
@@ -68,6 +67,17 @@ router.post("/", async (req, res) => {
       })
       .returning();
 
+    if (typeof res.app.locals.broadCastMatch === "function") {
+      try {
+        res.app.locals.broadCastMatch(event);
+      } catch (broadcastError) {
+        console.error(
+          "Failed to broadcast match_created event",
+          broadcastError,
+        );
+      }
+    }
+
     res.status(201).json({
       message: "successfully added a match",
       data: event,
@@ -75,7 +85,6 @@ router.post("/", async (req, res) => {
   } catch (e) {
     res.status(500).json({
       error: "Failed to create Match",
-      details: JSON.stringify(e),
     });
   }
 });
