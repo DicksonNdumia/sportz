@@ -1,7 +1,6 @@
 import chalk from "chalk";
-import type { Request, Response, NextFunction } from "express";
 
-export const logger = (req: Request, res: Response, next: NextFunction) => {
+export const logger = (req, res, next) => {
   const start = Date.now();
 
   res.on("finish", () => {
@@ -30,7 +29,7 @@ export const logger = (req: Request, res: Response, next: NextFunction) => {
               : chalk.white;
 
     console.log(
-      `${httpMethodColor(req.method)} ${chalk.white(`http://localhost:3000${req.url}`)}` +
+      `${httpMethodColor(req.method)} ${chalk.white(`http://localhost:3000${req.url || "undefined"}`)}` +
         statusCodeColor(res.statusCode) +
         chalk.gray(`- ${durationTaken}ms`),
     );
