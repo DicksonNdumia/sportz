@@ -69,7 +69,7 @@ router.post("/:id", async (req, res) => {
 
   try {
     const { minute, ...rest } = bodyResult.data;
-    const commentaryInsert = await db
+    const [entry] = await db
       .insert(commentary)
       .values({
         matchId: paramsResult.data.id,
@@ -78,15 +78,14 @@ router.post("/:id", async (req, res) => {
       })
       .returning();
 
-    if (typeof res.app.locals.broadCastCommentary === "function") {
-      try {
-        res.app.locals.broadCastCommentary(commentaryInsert);
-      } catch (broadcastError) {
-        console.error(`Failed to broadcast commentary`, broadcastError);
-      }
+    try {
+          res.app.locals.broadCastCommentary(entry.matchId, entry);
+          } catch (broadcastError) {
+           console.error("Failed to broadcast commentary", broadcastError);
+
     }
 
-    return res.status(201).json(commentaryInsert);
+    return res.status(201).json(entry);
   } catch (error) {
     console.error("Failed to create commentary", error);
     return res.status(500).json({
