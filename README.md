@@ -236,6 +236,7 @@ docker run -p 5000:5000 dicksonndumia19/socketstwo-api:latest
 ```bash
 |── .github
 |── drizzle
+|── kubernetes
 src/
 │
 ├── routes/
@@ -246,6 +247,10 @@ src/
 ├── config/
 ├── shcema/
 └── index.js
+|
+| .env
+| .gitignore
+
 ```
 
 ---
