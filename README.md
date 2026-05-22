@@ -245,7 +245,7 @@ src/
 ├── validation/
 ├── utils/
 ├── config/
-├── shcema/
+├── schema/
 └── index.js
 |
 | .env

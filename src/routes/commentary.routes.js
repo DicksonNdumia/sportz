@@ -78,9 +78,10 @@ router.post("/:id", async (req, res) => {
       })
       .returning();
 
-    if (res.app.locals.broadCastCommentary) {
-
-        res.app.locals.broadCastCommentary(entry.matchId,entry);
+    try {
+          res.app.locals.broadCastCommentary(entry.matchId, entry);
+          } catch (broadcastError) {
+           console.error("Failed to broadcast commentary", broadcastError);
 
     }
 
