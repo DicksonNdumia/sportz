@@ -7,86 +7,12 @@ import { db } from "../config/db.config.js";
 import { match } from "../schema/schema.js";
 import { getMatchStatus } from "../utils/match.status.js";
 import { desc } from "drizzle-orm";
+import { addMatch, getMatches } from "../controller/mathc.controller.js";
 
 const router = express.Router();
 const MAX_LIMIT = 100;
-router.get("/", async (req, res) => {
-  const parsed = listMatchesQuerySchema.safeParse(req.query);
+router.get("/", getMatches);
 
-  if (!parsed.success) {
-    return res.status(400).json({
-      error: "Invalid Payload",
-      details: JSON.stringify(parsed.error),
-    });
-  }
-  const limit = Math.min(parsed.data ?? 50, MAX_LIMIT);
-
-  try {
-    const data = await db
-      .select()
-      .from(match)
-      .orderBy(desc(match.createdAt))
-      .limit(limit);
-
-    return res.status(200).json({
-      message: "Here are the matches available",
-      event: data,
-    });
-  } catch (e) {
-    return res.status(500).json({
-      error: "Failed to get Matches",
-    });
-  }
-});
-
-router.post("/", async (req, res) => {
-  const parsed = createMatchSchema.safeParse(req.body);
-  //console.log("This is was Hit :", parsed);
-
-  if (!parsed.success) {
-    return res.status(400).json({
-      error: "Invalid Payload",
-      details: JSON.stringify(parsed.error),
-    });
-  }
-  const {
-    data: { startTime, endTime, homeScore, awayScore },
-  } = parsed;
-  //console.log("This is the parsed data:", parsed);
-
-  try {
-    const [event] = await db
-      .insert(match)
-      .values({
-        ...parsed.data,
-        startTime: new Date(startTime),
-        endTime: new Date(endTime),
-        homeScore: homeScore ?? 0,
-        awayScore: awayScore ?? 0,
-        status: getMatchStatus(startTime, endTime),
-      })
-      .returning();
-
-    if (typeof res.app.locals.broadCastMatch === "function") {
-      try {
-        res.app.locals.broadCastMatch(event);
-      } catch (broadcastError) {
-        console.error(
-          "Failed to broadcast match_created event",
-          broadcastError,
-        );
-      }
-    }
-
-    res.status(201).json({
-      message: "successfully added a match",
-      data: event,
-    });
-  } catch (e) {
-    return res.status(500).json({
-      error: "Failed to create Match",
-    });
-  }
-});
+router.post("/", addMatch);
 
 export default router;
